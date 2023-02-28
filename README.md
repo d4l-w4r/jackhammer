@@ -1,2 +1,2 @@
-# jackhammer
-When you this hammer, every poor endpoint looks like a nail 🥲
+# HttpJackhammer
+When you have this hammer, every poor API endpoint looks like a nail 🥲
