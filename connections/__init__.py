@@ -1,2 +1,2 @@
-from connection import UnclosableConnection
-from pooling import ConnectionPool
+from .unclosable_connection import *
+from .pooling import *

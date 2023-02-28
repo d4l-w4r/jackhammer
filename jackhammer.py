@@ -1,4 +1,5 @@
-from connections import ConnectionPool, UnclosableConnection
+from connections import ConnectionPool
+from connections import UnclosableConnection
 import queue
 import threading
 from threads import ClientTaskControl, TaskControl

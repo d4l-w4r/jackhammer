@@ -1,20 +1,18 @@
-from connection import Connection, ManagedConnectionCtx
+from ..connection import Connection
+from ..unclosable_connection import UnclosableConnection
+from .connection_pool_queue import ConnectionPoolQueue
 import http.client as htc
-import queue
 
+class ManagedConnectionCtx(object):
+    def __init__(self, connection_pool: ConnectionPoolQueue):
+        self.__conn_q = connection_pool
 
-class ConnectionPoolQueue(object):
-    def __init__(self, size):
-        self.__internal_q = queue.Queue(size)
-    
-    def get(self) -> Connection:
-        return self.__internal_q.get()
+    def __enter__(self) -> UnclosableConnection:
+        self.__active_con = self.__conn_q.get()
+        return UnclosableConnection(self.__active_con)
 
-    def put(self, connection: Connection) -> None:
-        self.__internal_q.put(connection)
-    
-    def size(self) -> int:
-        return self.__internal_q.qsize()
+    def __exit__(self, exc_type, exc_value, exc_tb):
+        self.__conn_q.put(self.__active_con)
 
 class ConnectionPool(object):
     def __init__(self, size) -> None:
